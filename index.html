@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nordic Food Tourism 2026-2027 · Project Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#870000;--red-soft:#a33333;--rose:#f6d9d9;--rose-soft:#fbecec;
+  --ink:#121212;--gray:#6e6e6e;--line:#e8e0db;
+  --paper:#faf7f5;--warm:#f6f1ee;--white:#ffffff;
+  --green:#2e6b4f;--amber:#b08650;--blue:#2c6e9b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Mulish',sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ---------- header ---------- */
+header{background:var(--red);color:#fff;padding:46px 0 38px}
+header .kicker{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rose)}
+h1{font-weight:900;font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.03;letter-spacing:-.01em;margin:8px 0 10px}
+header .sub{color:var(--rose);font-size:1.02rem;max-width:640px}
+.headrow{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between}
+.updbox{text-align:right;font-size:.82rem;color:var(--rose)}
+.updbox button{margin-top:6px;background:#fff;color:var(--red);border:0;font:inherit;font-weight:700;
+  padding:8px 14px;border-radius:20px;cursor:pointer}
+.updbox button:hover{background:var(--rose)}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;background:#fffdfc;border-bottom:1px solid var(--line);z-index:50}
+nav .wrap{display:flex;gap:4px;overflow-x:auto}
+nav a{display:flex;gap:7px;align-items:center;padding:13px 14px;text-decoration:none;color:var(--gray);
+  font-size:.86rem;font-weight:700;white-space:nowrap;border-bottom:3px solid transparent}
+nav a:hover,nav a.on{color:var(--red);border-bottom-color:var(--red)}
+nav a .n{font-weight:900;font-size:.72rem;color:var(--red)}
+
+/* ---------- shared ---------- */
+section{padding:46px 0 8px}
+.sec-head{display:flex;gap:14px;align-items:center;margin-bottom:22px}
+.sec-head .num{font-weight:900;font-size:.92rem;color:#fff;background:var(--red);width:34px;height:34px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-head h2{font-weight:900;font-size:1.65rem;letter-spacing:-.01em}
+.sec-head .hint{margin-left:auto;font-size:.8rem;color:var(--gray)}
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px}
+.banner{display:none;margin:18px auto 0;max-width:1180px;padding:0 24px}
+.banner.show{display:block}
+.banner>div{border-radius:12px;padding:12px 18px;font-size:.9rem}
+.banner.load>div{background:var(--warm);border:1px solid var(--line)}
+.banner.err>div{background:var(--rose-soft);border:1px solid var(--rose);color:#7a1f1f}
+code{background:var(--warm);padding:1px 6px;border-radius:5px;font-size:.85em}
+
+/* ---------- 01 about ---------- */
+.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.about-grid .card h3{color:var(--red);font-size:1.05rem;font-weight:900;margin-bottom:8px}
+.about-grid .card p{font-size:.92rem;color:#333}
+.facts{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:16px}
+.fact{background:var(--warm);border-radius:12px;padding:14px 16px}
+.fact .k{font-size:.68rem;font-weight:900;letter-spacing:.09em;color:var(--red);text-transform:uppercase}
+.fact .v{font-size:.9rem;font-weight:700;margin-top:4px}
+.fact .s{font-size:.78rem;color:var(--gray)}
+
+/* ---------- 02 goals ---------- */
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.goal .top{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.goal .top .num{background:var(--red);color:#fff;font-weight:900;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.goal h3{font-size:1.12rem;font-weight:900;color:var(--red)}
+.goal p{font-size:.92rem;color:#333;margin-bottom:14px}
+.goal .big{font-size:2.6rem;font-weight:900;color:var(--red);line-height:1}
+.goal .metric{font-size:.82rem;color:var(--gray);margin-top:4px}
+
+/* ---------- 03 deliverables ---------- */
+.keydates{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.kd{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--white);position:relative}
+.kd.next{border-color:var(--red);background:var(--rose-soft)}
+.kd.past{opacity:.72}
+.kd .d{font-weight:900;font-size:1.3rem;color:var(--red)}
+.kd .t{font-size:.88rem;font-weight:700;margin-top:2px}
+.kd .st{font-size:.74rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-top:8px;display:inline-block;
+  padding:2px 9px;border-radius:10px;background:var(--warm);color:var(--gray)}
+.kd.next .st{background:var(--red);color:#fff}
+.kd.done .st{background:#e3efe8;color:var(--green)}
+.overall{display:flex;align-items:center;gap:18px;background:var(--white);border:1px solid var(--line);
+  border-radius:14px;padding:16px 22px;margin-bottom:22px;flex-wrap:wrap}
+.overall .pct{font-size:2rem;font-weight:900;color:var(--red)}
+.overall .bar{flex:1;min-width:220px;height:12px;border-radius:6px;background:var(--warm);overflow:hidden}
+.overall .bar i{display:block;height:100%;background:var(--red);border-radius:6px}
+.overall .lbl{font-size:.84rem;color:var(--gray)}
+.area-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.area{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px}
+.area .ahead{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.area .code{font-size:.7rem;font-weight:900;color:#fff;background:var(--red);padding:2px 8px;border-radius:9px}
+.area h3{font-size:1.02rem;font-weight:900}
+.area .aprog{display:flex;align-items:center;gap:10px;margin:8px 0 12px}
+.area .abar{flex:1;height:7px;border-radius:4px;background:var(--warm);overflow:hidden}
+.area .abar i{display:block;height:100%;background:var(--red)}
+.area .apct{font-size:.76rem;font-weight:900;color:var(--gray);white-space:nowrap}
+.act{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--line);font-size:.88rem}
+.act:first-of-type{border-top:0}
+.act .tick{width:19px;height:19px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:900;color:#fff}
+.act.done .tick{background:var(--green);border-color:var(--green)}
+.act.ongoing .tick{background:var(--amber);border-color:var(--amber)}
+.act.done .txt{color:var(--gray);text-decoration:line-through;text-decoration-thickness:1px}
+.act .dt{margin-left:auto;font-size:.76rem;font-weight:700;color:var(--gray);white-space:nowrap;padding-left:8px}
+.act .own{font-size:.74rem;color:var(--gray)}
+
+/* ---------- 04 meetings ---------- */
+.mfilter{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.mfilter button{font:inherit;font-size:.8rem;font-weight:700;padding:7px 14px;border-radius:18px;
+  border:1px solid var(--line);background:var(--white);color:var(--gray);cursor:pointer}
+.mfilter button.on{background:var(--red);border-color:var(--red);color:#fff}
+.mtable{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.mtable th{font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);
+  text-align:left;padding:12px 16px;background:var(--warm)}
+.mtable td{padding:12px 16px;border-top:1px solid var(--line);font-size:.9rem;vertical-align:top}
+.mtable tr.next-meeting td{background:var(--rose-soft)}
+.mtable .grp{font-size:.72rem;font-weight:900;padding:2px 9px;border-radius:10px;white-space:nowrap}
+.grp.steering{background:var(--rose);color:var(--red)}
+.grp.cmo{background:#e4edf4;color:var(--blue)}
+.grp.ntwg{background:#e3efe8;color:var(--green)}
+.grp.other{background:var(--warm);color:var(--gray)}
+.nextbadge{font-size:.68rem;font-weight:900;color:#fff;background:var(--red);border-radius:9px;padding:2px 8px;margin-left:8px}
+
+/* ---------- 05 gantt ---------- */
+.gantt{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px;overflow-x:auto}
+.gwrap{min-width:860px}
+.gmonths{display:grid;grid-template-columns:190px repeat(var(--months),1fr);font-size:.62rem;font-weight:700;
+  color:var(--gray);margin-bottom:6px}
+.gmonths div{text-align:center;border-left:1px solid var(--warm);padding:2px 0}
+.gmonths div:first-child{border-left:0}
+.grow{display:grid;grid-template-columns:190px 1fr;align-items:center;margin:7px 0}
+.grow .glabel{font-size:.8rem;font-weight:700;padding-right:12px}
+.grow .gtrack{position:relative;height:22px;background:var(--warm);border-radius:6px}
+.grow .gbar{position:absolute;top:3px;bottom:3px;background:var(--red);border-radius:5px;opacity:.88}
+.grow .gbar.alt{background:var(--red-soft)}
+.gantt-foot{margin-top:14px;position:relative}
+.todayline{position:absolute;top:-999px;width:2px;background:var(--ink)}
+.glegend{display:flex;gap:18px;font-size:.76rem;color:var(--gray);margin-top:12px;flex-wrap:wrap}
+.glegend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.timeline{margin-top:26px}
+.tl-item{display:flex;gap:16px;padding:10px 0;border-top:1px dashed var(--line);font-size:.9rem}
+.tl-item .tl-date{width:110px;flex-shrink:0;font-weight:900;color:var(--red);font-size:.82rem;padding-top:1px}
+.tl-item.past{opacity:.6}
+.tl-item .tl-what b{font-weight:700}
+.tl-item .tl-what .tl-area{font-size:.72rem;color:var(--gray);margin-left:6px}
+
+footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font-size:.8rem;color:var(--gray)}
+@media(max-width:900px){
+  .about-grid,.goal-grid,.area-grid,.keydates{grid-template-columns:1fr}
+  .facts{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap headrow">
+    <div>
+      <div class="kicker">Project dashboard</div>
+      <h1>Nordic Food Tourism<br>2026-2027</h1>
+      <div class="sub">Eight Nordic tourism organisations and the food sector, building a shared platform for Nordic food tourism.</div>
+    </div>
+    <div class="updbox">
+      <div id="updated"></div>
+      <button onclick="loadAll()">&#8635; Refresh data</button>
+    </div>
+  </div>
+</header>
+
+<div class="banner" id="bannerHolder"><div id="banner"></div></div>
+
+<nav><div class="wrap">
+  <a href="#om"><span class="n">01</span> About</a>
+  <a href="#mal"><span class="n">02</span> Goals</a>
+  <a href="#leveranser"><span class="n">03</span> Deliverables</a>
+  <a href="#moten"><span class="n">04</span> Meetings</a>
+  <a href="#tidsplan"><span class="n">05</span> Gantt &amp; timeline</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="om">
+  <div class="sec-head"><div class="num">01</div><h2>About the project</h2></div>
+  <div class="about-grid">
+    <div class="card"><h3>A strong legacy</h3>
+      <p>The New Nordic Kitchen Manifesto (2004) reshaped how the world sees Nordic food, and Nordic chefs have collected Bocuse d'Or medals for two decades.</p></div>
+    <div class="card"><h3>A fragmented picture</h3>
+      <p>High-quality local and seasonal food experiences exist across the region, but they are promoted country by country, with no shared Nordic story.</p></div>
+    <div class="card"><h3>A shared decision</h3>
+      <p>During the Danish Presidency of the Nordic Council of Ministers in 2026, all eight Nordic NTOs agreed to build a longer-term collaboration with the food sector.</p></div>
+  </div>
+  <div class="facts">
+    <div class="fact"><div class="k">Period</div><div class="v">May 2026 - Dec 2027</div><div class="s">21 months</div></div>
+    <div class="fact"><div class="k">Admin body</div><div class="v">Visit Denmark</div><div class="s">Project management</div></div>
+    <div class="fact"><div class="k">Partners</div><div class="v">All eight Nordic NTOs</div><div class="s">+ food organisations</div></div>
+    <div class="fact"><div class="k">Steering group</div><div class="v">3 CMOs</div><div class="s">Faroe Isl. · Finland · Denmark</div></div>
+    <div class="fact"><div class="k">Funding</div><div class="v">DKK 4.745m</div><div class="s">NCM 2.115m + NTOs 2.63m</div></div>
+    <div class="fact"><div class="k">Framework</div><div class="v">Nordic Tourism Plan</div><div class="s">2025-2030 · Attractive Nordics</div></div>
+  </div>
+</section>
+
+<section id="mal">
+  <div class="sec-head"><div class="num">02</div><h2>What the project should achieve</h2>
+    <div class="hint">Both indicators start from a baseline of zero</div></div>
+  <div class="goal-grid">
+    <div class="card goal">
+      <div class="top"><div class="num">1</div><h3>Stronger Nordic collaboration</h3></div>
+      <p>Strengthened synergy between key tourism and food sector actors across the Nordic region, around common development and a shared narrative.</p>
+      <div class="big">60%</div>
+      <div class="metric">of event participants supporting a common Nordic narrative and future collaboration</div>
+    </div>
+    <div class="card goal">
+      <div class="top"><div class="num">2</div><h3>Greater international pull</h3></div>
+      <p>Increased international attractiveness of Nordic food, food destinations, and local and seasonal products across the region.</p>
+      <div class="big">40</div>
+      <div class="metric">press mentions, measured through media monitoring</div>
+    </div>
+  </div>
+</section>
+
+<section id="leveranser">
+  <div class="sec-head"><div class="num">03</div><h2>Deliverables</h2>
+    <div class="hint">Add and tick off activities in the Google Sheet</div></div>
+  <div class="keydates" id="keydates"></div>
+  <div class="overall" id="overall"></div>
+  <div class="area-grid" id="areas"></div>
+</section>
+
+<section id="moten">
+  <div class="sec-head"><div class="num">04</div><h2>Meeting calendar</h2>
+    <div class="hint">Steering group · CMO group · NTWG</div></div>
+  <div class="mfilter" id="mfilter"></div>
+  <table class="mtable">
+    <thead><tr><th style="width:130px">Date</th><th style="width:140px">Group</th><th>Topic</th><th style="width:190px">Location</th></tr></thead>
+    <tbody id="mbody"></tbody>
+  </table>
+</section>
+
+<section id="tidsplan">
+  <div class="sec-head"><div class="num">05</div><h2>Gantt &amp; timeline</h2>
+    <div class="hint">May 2026 - December 2027</div></div>
+  <div class="gantt"><div class="gwrap" id="gantt"></div>
+    <div class="glegend">
+      <span><i style="background:var(--red)"></i>Workstream</span>
+      <span><i style="background:var(--ink);width:3px;border-radius:1px"></i>Today</span>
+    </div>
+  </div>
+  <div class="card timeline" id="timeline"></div>
+</section>
+
+</main>
+
+<footer><div class="wrap" id="foot">
+  Nordic Food Tourism 2026-2027 · Data is read from the project Google Sheet. Edit the sheet, then press Refresh.
+</div></footer>
+
+<script>
+/* =====================================================================
+   KOPPLA GOOGLE SHEET (instruktioner på svenska för Frida)
+   1. Skapa ett Google Sheet med fyra flikar: Activities, Meetings, Gantt, Settings
+      Kolumner (rad 1, exakt så här, små bokstäver):
+        Activities: area,activity,date,status,owner
+           area   = 1.1 | 1.2 | 1.3 | 1.4 | 2.1 | 1.5
+           date   = 2026-08-21 eller 2026-10 (helt datum eller bara månad)
+           status = done | ongoing | planned  (klar/pågår/planerad funkar också)
+        Meetings:   date,group,topic,location   (group = Steering group | CMO group | NTWG | Other)
+        Gantt:      phase,start,end             (ISO-datum)
+        Settings:   key,value                   (t.ex. lastUpdated=2026-08-13, sheetEditUrl=https://...)
+   2. Arkiv → Dela → Publicera på webben → välj EN flik i taget → CSV → kopiera länken.
+   3. Klistra in de fyra länkarna nedan. Tomma strängar = inbyggd standarddata visas.
+   ===================================================================== */
+const SHEET_URLS = {
+  activities: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5gJe8WxCXE4hwpDwo_e9vDboWDU9KBcZKCtPFxI9UiYzuOR0z4D7tP9g_4o1_zgOh4t8kGuoYruXy/pub?gid=0&single=true&output=csv",
+  meetings:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5gJe8WxCXE4hwpDwo_e9vDboWDU9KBcZKCtPFxI9UiYzuOR0z4D7tP9g_4o1_zgOh4t8kGuoYruXy/pub?gid=1630723356&single=true&output=csv",
+  gantt:      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5gJe8WxCXE4hwpDwo_e9vDboWDU9KBcZKCtPFxI9UiYzuOR0z4D7tP9g_4o1_zgOh4t8kGuoYruXy/pub?gid=2033597690&single=true&output=csv",
+  settings:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5gJe8WxCXE4hwpDwo_e9vDboWDU9KBcZKCtPFxI9UiYzuOR0z4D7tP9g_4o1_zgOh4t8kGuoYruXy/pub?gid=1816019761&single=true&output=csv"
+};
+
+/* ---------- built-in default data (the current real plan) ---------- */
+const AREAS = [
+  {code:"1.1", name:"Desk research report"},
+  {code:"1.2", name:"Networking & development"},
+  {code:"1.3", name:"Shared Nordic narrative"},
+  {code:"1.4", name:"Product development catalogue"},
+  {code:"2.1", name:"Nordic presence at events"},
+  {code:"1.5", name:"Knowledge anchoring & exit"}
+];
+const DEFAULT_ACTIVITIES = [
+ {area:"1.1",activity:"National sections sent to all countries for feedback",date:"2026-08-21",status:"planned",owner:"Frida"},
+ {area:"1.1",activity:"Correction round with steering group and CMO group",date:"2026-09-14",status:"planned",owner:"Frida"},
+ {area:"1.1",activity:"Final report deadline",date:"2026-10-01",status:"planned",owner:"Frida"},
+ {area:"1.1",activity:"Distribution to steering group, NTWG, NCM, all NTOs and stakeholders",date:"2026-10",status:"planned",owner:""},
+ {area:"1.1",activity:"Digital report presentations for national and regional stakeholders",date:"2026-10",status:"planned",owner:""},
+ {area:"1.2",activity:"NTWG meeting and project presentation, Faroe Islands",date:"2026-08-17",status:"ongoing",owner:"Frida & Eva"},
+ {area:"1.2",activity:"Possible first official event at MR-N meeting, Copenhagen",date:"2026-10-01",status:"planned",owner:""},
+ {area:"1.2",activity:"Meeting with New Nordic Food on synergies for 2027",date:"2026-10",status:"planned",owner:""},
+ {area:"1.2",activity:"Annual wheel 2027 finalised and shared",date:"2026-11",status:"planned",owner:""},
+ {area:"1.3",activity:"Collect national food narratives from all eight countries",date:"2026-09",status:"ongoing",owner:"David"},
+ {area:"1.3",activity:"Narrative process design",date:"2026-10",status:"planned",owner:"David"},
+ {area:"1.4",activity:"Plan and process for the catalogue begins",date:"2026-10",status:"planned",owner:""},
+ {area:"1.4",activity:"Study visits: Norway and Åland (cross-border inspiration)",date:"2026-10",status:"planned",owner:""},
+ {area:"1.4",activity:"Catalogue delivered",date:"2027-12",status:"planned",owner:""},
+ {area:"2.1",activity:"Tivoli Food Festival, Copenhagen",date:"2026-08",status:"ongoing",owner:""},
+ {area:"2.1",activity:"WTM London 2026",date:"2026-11",status:"planned",owner:""},
+ {area:"2.1",activity:"WTM London 2027",date:"2027-11",status:"planned",owner:""},
+ {area:"1.5",activity:"Knowledge-anchoring activities",date:"2027-10",status:"planned",owner:""},
+ {area:"1.5",activity:"Exit webinar",date:"2027-12",status:"planned",owner:""}
+];
+const DEFAULT_MEETINGS = [
+ {date:"2026-08-17",group:"NTWG",topic:"NTWG meeting: project presentation, questions and expectations",location:"Faroe Islands (17-19 Aug)"},
+ {date:"2026-09-14",group:"Steering group",topic:"Correction round, final report",location:"Digital"},
+ {date:"2026-09",group:"CMO group",topic:"Correction round, final report",location:"Digital"},
+ {date:"2026-10-01",group:"Other",topic:"MR-N meeting, possible first official event",location:"Copenhagen"}
+];
+const DEFAULT_GANTT = [
+ {phase:"1.1 Desk research report",start:"2026-05-01",end:"2026-10-01"},
+ {phase:"1.2 Networking & development",start:"2026-05-15",end:"2027-12-31"},
+ {phase:"1.3 Shared Nordic narrative",start:"2026-05-15",end:"2027-12-31"},
+ {phase:"1.4 Product development catalogue",start:"2026-10-01",end:"2027-12-31"},
+ {phase:"2.1 Nordic presence at events",start:"2026-05-15",end:"2027-12-31"},
+ {phase:"1.5 Knowledge anchoring & exit",start:"2027-10-01",end:"2027-12-31"}
+];
+const KEYDATES = [
+ {date:"2026-08-21",label:"National sections sent out"},
+ {date:"2026-09-14",label:"Correction round, steering group"},
+ {date:"2026-10-01",label:"Final report deadline"}
+];
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function parseDate(s){
+  s=(s||"").trim();
+  let m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m)return{d:new Date(+m[1],+m[2]-1,+m[3]),precision:"day"};
+  m=s.match(/^(\d{4})-(\d{2})$/);
+  if(m)return{d:new Date(+m[1],+m[2]-1,15),precision:"month"};
+  m=s.match(/^(\d{4})$/);
+  if(m)return{d:new Date(+m[1],6,1),precision:"year"};
+  return null;
+}
+function fmtDate(s){
+  const p=parseDate(s);
+  if(!p)return s||"";
+  if(p.precision==="day")return p.d.getDate()+" "+MONTHS[p.d.getMonth()]+" "+p.d.getFullYear();
+  if(p.precision==="month")return MONTHS[p.d.getMonth()]+" "+p.d.getFullYear();
+  return s;
+}
+function normStatus(s){
+  s=(s||"").trim().toLowerCase();
+  if(["done","klar","klart","färdig","ja"].includes(s))return"done";
+  if(["ongoing","pågår","pagar","igång","igang"].includes(s))return"ongoing";
+  return"planned";
+}
+function esc(t){return(t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function parseCSV(text){
+  const rows=[];let row=[],field="",inQ=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(inQ){
+      if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else inQ=false; }
+      else field+=c;
+    }else{
+      if(c==='"')inQ=true;
+      else if(c===","){row.push(field);field="";}
+      else if(c==="\n"||c==="\r"){ if(c==="\r"&&text[i+1]==="\n")i++;
+        row.push(field);field="";
+        if(row.some(v=>v.trim()!==""))rows.push(row);
+        row=[]; }
+      else field+=c;
+    }
+  }
+  if(field!==""||row.length){row.push(field);if(row.some(v=>v.trim()!==""))rows.push(row);}
+  if(!rows.length)return[];
+  const head=rows[0].map(h=>h.trim().toLowerCase());
+  return rows.slice(1).map(r=>{
+    const o={};head.forEach((h,i)=>o[h]=(r[i]||"").trim());return o;
+  }).filter(o=>{
+    const first=Object.values(o)[0]||"";
+    return !first.startsWith("•") && !first.toUpperCase().startsWith("GUIDE");
+  });
+}
+async function fetchCsv(url){
+  const r=await fetch(url,{cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  return parseCSV(await r.text());
+}
+function banner(kind,msg){const b=$("banner");$("bannerHolder").className="banner show "+kind;b.innerHTML=msg;}
+function clearBanner(){$("bannerHolder").className="banner";}
+
+/* ---------- render: key dates ---------- */
+function renderKeydates(activities){
+  const today=new Date();today.setHours(0,0,0,0);
+  const byDate={};activities.forEach(a=>{if(a.date)byDate[a.date.trim()]=normStatus(a.status);});
+  let nextIdx=-1;
+  KEYDATES.forEach((k,i)=>{
+    const p=parseDate(k.date);
+    if(nextIdx===-1&&p&&p.d>=today&&byDate[k.date]!=="done")nextIdx=i;
+  });
+  $("keydates").innerHTML=KEYDATES.map((k,i)=>{
+    const p=parseDate(k.date);const done=byDate[k.date]==="done";
+    const past=p&&p.d<today;
+    let cls="kd",st="Planned";
+    if(done){cls+=" done";st="Done";}
+    else if(i===nextIdx){cls+=" next";st="Next up";}
+    else if(past){cls+=" past";st="Passed";}
+    return `<div class="${cls}"><div class="d">${fmtDate(k.date)}</div>
+      <div class="t">${esc(k.label)}</div><span class="st">${st}</span></div>`;
+  }).join("");
+}
+
+/* ---------- render: areas ---------- */
+function renderAreas(activities){
+  let done=0,total=0;
+  const html=AREAS.map(A=>{
+    const acts=activities.filter(a=>(a.area||"").trim()===A.code)
+      .sort((x,y)=>{
+        const px=parseDate(x.date),py=parseDate(y.date);
+        if(!px&&!py)return 0; if(!px)return 1; if(!py)return -1;
+        return px.d-py.d;
+      });
+    const d=acts.filter(a=>normStatus(a.status)==="done").length;
+    done+=d; total+=acts.length;
+    const pct=acts.length?Math.round(100*d/acts.length):0;
+    const rows=acts.length?acts.map(a=>{
+      const s=normStatus(a.status);
+      const mark=s==="done"?"✓":(s==="ongoing"?"›":"");
+      return `<div class="act ${s}"><div class="tick">${mark}</div>
+        <div><span class="txt">${esc(a.activity)}</span>${a.owner?` <span class="own">· ${esc(a.owner)}</span>`:""}</div>
+        <div class="dt">${fmtDate(a.date)}</div></div>`;
+    }).join(""):`<div class="act"><div></div><span style="color:var(--gray);font-style:italic">No activities yet, add them in the sheet.</span></div>`;
+    return `<div class="area"><div class="ahead"><span class="code">${A.code}</span><h3>${esc(A.name)}</h3></div>
+      <div class="aprog"><div class="abar"><i style="width:${pct}%"></i></div><span class="apct">${d} / ${acts.length} done</span></div>
+      ${rows}</div>`;
+  }).join("");
+  $("areas").innerHTML=html;
+  const pct=total?Math.round(100*done/total):0;
+  $("overall").innerHTML=`<div class="pct">${pct}%</div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="lbl"><b>${done}</b> of <b>${total}</b> activities completed across all deliverables</div>`;
+}
+
+/* ---------- render: meetings ---------- */
+let meetingFilter="All";
+function groupClass(g){
+  g=(g||"").toLowerCase();
+  if(g.includes("steering")||g.includes("styr"))return"steering";
+  if(g.includes("cmo"))return"cmo";
+  if(g.includes("ntwg"))return"ntwg";
+  return"other";
+}
+function renderMeetings(meetings){
+  const groups=["All","Steering group","CMO group","NTWG","Other"];
+  $("mfilter").innerHTML=groups.map(g=>
+    `<button class="${g===meetingFilter?"on":""}" onclick="meetingFilter='${g}';renderMeetings(window._meetings)">${g}</button>`).join("");
+  window._meetings=meetings;
+  const today=new Date();today.setHours(0,0,0,0);
+  const sorted=[...meetings].sort((a,b)=>{
+    const pa=parseDate(a.date),pb=parseDate(b.date);
+    if(!pa&&!pb)return 0; if(!pa)return 1; if(!pb)return -1;
+    return pa.d-pb.d;
+  });
+  let nextKey=null;
+  for(const m of sorted){const p=parseDate(m.date);if(p&&p.d>=today){nextKey=m;break;}}
+  const vis=sorted.filter(m=>meetingFilter==="All"||groupClass(m.group)===groupClass(meetingFilter));
+  $("mbody").innerHTML=vis.length?vis.map(m=>{
+    const isNext=m===nextKey;
+    return `<tr class="${isNext?"next-meeting":""}">
+      <td><b>${fmtDate(m.date)}</b>${isNext?'<span class="nextbadge">NEXT</span>':""}</td>
+      <td><span class="grp ${groupClass(m.group)}">${esc(m.group)}</span></td>
+      <td>${esc(m.topic)}</td><td>${esc(m.location)}</td></tr>`;
+  }).join(""):`<tr><td colspan="4" style="color:var(--gray);font-style:italic">No meetings in this category yet.</td></tr>`;
+}
+
+/* ---------- render: gantt + timeline ---------- */
+const G_START=new Date(2026,4,1);   // May 2026
+const G_END=new Date(2028,0,1);     // exclusive
+function monthDiff(a,b){return(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());}
+function renderGantt(gantt,activities){
+  const nMonths=monthDiff(G_START,G_END); // 20
+  let mh=`<div class="gmonths" style="--months:${nMonths}"><div></div>`;
+  for(let i=0;i<nMonths;i++){
+    const d=new Date(G_START.getFullYear(),G_START.getMonth()+i,1);
+    mh+=`<div>${MONTHS[d.getMonth()][0]}${d.getMonth()===0||i===0?"<br>"+d.getFullYear():""}</div>`;
+  }
+  mh+="</div>";
+  const span=G_END-G_START;
+  const rows=gantt.map((g,i)=>{
+    const s=parseDate(g.start),e=parseDate(g.end);
+    if(!s||!e)return"";
+    const l=Math.max(0,(s.d-G_START)/span*100);
+    const r=Math.min(100,(e.d-G_START)/span*100);
+    return `<div class="grow"><div class="glabel">${esc(g.phase)}</div>
+      <div class="gtrack"><div class="gbar ${i%2?"alt":""}" style="left:${l.toFixed(2)}%;width:${(r-l).toFixed(2)}%"></div>
+      ${todayMarker(span)}</div></div>`;
+  }).join("");
+  $("gantt").innerHTML=mh+rows;
+
+  const today=new Date();today.setHours(0,0,0,0);
+  const items=activities.filter(a=>a.date&&parseDate(a.date))
+    .sort((a,b)=>parseDate(a.date).d-parseDate(b.date).d);
+  $("timeline").innerHTML="<h3 style='font-weight:900;margin-bottom:10px'>Milestones</h3>"+
+    items.map(a=>{
+      const p=parseDate(a.date);
+      const past=p.d<today&&normStatus(a.status)==="done";
+      return `<div class="tl-item ${past?"past":""}">
+        <div class="tl-date">${fmtDate(a.date)}</div>
+        <div class="tl-what"><b>${esc(a.activity)}</b><span class="tl-area">${esc(a.area)}</span></div></div>`;
+    }).join("");
+}
+function todayMarker(span){
+  const today=new Date();
+  if(today<G_START||today>=G_END)return"";
+  const x=((today-G_START)/span*100).toFixed(2);
+  return `<div style="position:absolute;top:-2px;bottom:-2px;left:${x}%;width:2px;background:var(--ink)"></div>`;
+}
+
+/* ---------- load ---------- */
+function settingsToObj(rows){const o={};(rows||[]).forEach(r=>{if(r.key)o[r.key.trim().toLowerCase()]=(r.value||"").trim();});return o;}
+function renderAll(d){
+  const s=settingsToObj(d.settings);
+  $("updated").textContent=s.lastupdated?("Sheet last updated: "+fmtDate(s.lastupdated)):"";
+  if(s.sheetediturl){$("foot").innerHTML+=` · <a href="${esc(s.sheetediturl)}" style="color:var(--red)">Open the Google Sheet</a>`;}
+  renderKeydates(d.activities);
+  renderAreas(d.activities);
+  renderMeetings(d.meetings);
+  renderGantt(d.gantt,d.activities);
+}
+async function loadAll(){
+  const configured=Object.values(SHEET_URLS).every(u=>u&&u.startsWith("http"));
+  if(!configured){
+    banner("load","&#9881;&#65039; <b>Not connected to a Google Sheet yet.</b> Showing the built-in project plan. Paste your four published CSV links into <code>SHEET_URLS</code> in index.html to make this live.");
+    renderAll({activities:DEFAULT_ACTIVITIES,meetings:DEFAULT_MEETINGS,gantt:DEFAULT_GANTT,settings:[]});
+    return;
+  }
+  banner("load","&#8987; Fetching the latest data from the Google Sheet…");
+  try{
+    const keys=Object.keys(SHEET_URLS);
+    const res=await Promise.all(keys.map(k=>fetchCsv(SHEET_URLS[k])));
+    const d={};keys.forEach((k,i)=>d[k]=res[i]);
+    /* Any tab that is published but still empty falls back to the built-in
+       plan for that tab, so the page never renders half-blank. */
+    const DEFAULTS={activities:DEFAULT_ACTIVITIES,meetings:DEFAULT_MEETINGS,gantt:DEFAULT_GANTT,settings:[]};
+    const emptyTabs=keys.filter(k=>k!=="settings"&&(!d[k]||!d[k].length));
+    emptyTabs.forEach(k=>d[k]=DEFAULTS[k]);
+    if(emptyTabs.length){
+      banner("load","&#128203; The sheet tab(s) <b>"+emptyTabs.join(", ")+"</b> are still empty, showing the built-in plan for those. Paste the template data into the Google Sheet and press Refresh.");
+    }else{clearBanner();}
+    renderAll(d);
+  }catch(e){
+    banner("err","&#9888;&#65039; Could not fetch data. Check that every tab is published as CSV and the links are correct. ("+esc(e.message||String(e))+")");
+    renderAll({activities:DEFAULT_ACTIVITIES,meetings:DEFAULT_MEETINGS,gantt:DEFAULT_GANTT,settings:[]});
+  }
+}
+loadAll();
+</script>
+</body>
+</html>
