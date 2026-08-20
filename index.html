@@ -124,6 +124,17 @@ code{background:var(--warm);padding:1px 6px;border-radius:5px;font-size:.85em}
 .grp.ntwg{background:#e3efe8;color:var(--green)}
 .grp.other{background:var(--warm);color:var(--gray)}
 .nextbadge{font-size:.68rem;font-weight:900;color:#fff;background:var(--red);border-radius:9px;padding:2px 8px;margin-left:8px}
+.heldbadge{font-size:.68rem;font-weight:900;color:var(--green);background:#e3efe8;border-radius:9px;padding:2px 8px;margin-left:8px}
+.mtable td.mtick{width:46px;text-align:center;cursor:pointer;user-select:none}
+.mtable td.mtick .tk{width:20px;height:20px;border-radius:6px;border:2px solid var(--line);background:var(--white);
+  display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;color:#fff;transition:.15s}
+.mtable td.mtick:hover .tk{border-color:var(--green)}
+.mtable tr.held td{opacity:.55}
+.mtable tr.held td.mtick{opacity:1}
+.mtable tr.held .tk{background:var(--green);border-color:var(--green)}
+.mtable tr.held .topic{text-decoration:line-through;text-decoration-thickness:1px}
+#mtoggle{margin-left:auto}
+#mtoggle.on{background:var(--green);border-color:var(--green);color:#fff}
 
 /* ---------- 05 gantt ---------- */
 .gantt{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px;overflow-x:auto}
@@ -236,7 +247,7 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
     <div class="hint">Steering group · CMO group · NTWG</div></div>
   <div class="mfilter" id="mfilter"></div>
   <table class="mtable">
-    <thead><tr><th style="width:130px">Date</th><th style="width:140px">Group</th><th>Topic</th><th style="width:190px">Location</th></tr></thead>
+    <thead><tr><th style="width:46px"></th><th style="width:130px">Date</th><th style="width:140px">Group</th><th>Topic</th><th style="width:190px">Location</th></tr></thead>
     <tbody id="mbody"></tbody>
   </table>
 </section>
@@ -317,6 +328,8 @@ const DEFAULT_ACTIVITIES = [
 ];
 const DEFAULT_MEETINGS = [
  {date:"2026-08-17",group:"NTWG",topic:"NTWG meeting: project presentation, questions and expectations",location:"Faroe Islands (17-19 Aug)"},
+ {date:"2026-08-24",group:"Other",topic:"Nordic Council of Ministers meeting, with Eva and David",location:"Copenhagen"},
+ {date:"2026-08-24",group:"Other",topic:"New Nordic Food programme meeting",location:"Copenhagen"},
  {date:"2026-09-14",group:"Steering group",topic:"Correction round, final report",location:"Digital"},
  {date:"2026-09",group:"CMO group",topic:"Correction round, final report",location:"Digital"},
  {date:"2026-10-01",group:"Other",topic:"MR-N meeting, possible first official event",location:"Copenhagen"}
@@ -429,6 +442,24 @@ function renderAreas(activities){
 
 /* ---------- render: meetings ---------- */
 let meetingFilter="All";
+let hideHeld=true;   /* avbockade möten försvinner ur listan, knappen tar tillbaka dem */
+
+/* Meetings that have taken place. Ticking one off is stored in this browser
+   (localStorage). To mark a meeting as held for everyone, add a "status"
+   column in the Meetings tab and write done/held in it. */
+const HELD_KEY="nft-meetings-held";
+function heldSet(){
+  try{return new Set(JSON.parse(localStorage.getItem(HELD_KEY)||"[]"));}
+  catch(e){return new Set();}
+}
+function saveHeld(s){
+  try{localStorage.setItem(HELD_KEY,JSON.stringify([...s]));}catch(e){}
+}
+function mKey(m){return (m.date||"")+"|"+(m.topic||"");}
+function heldInSheet(m){
+  return ["done","held","klar","genomfört","genomfort"].includes((m.status||"").trim().toLowerCase());
+}
+
 function groupClass(g){
   g=(g||"").toLowerCase();
   if(g.includes("steering")||g.includes("styr"))return"steering";
@@ -437,26 +468,42 @@ function groupClass(g){
   return"other";
 }
 function renderMeetings(meetings){
+  window._meetings=meetings;
+  const held=heldSet();
+  const isHeld=m=>heldInSheet(m)||held.has(mKey(m));
+  const nHeld=meetings.filter(isHeld).length;
+
   const groups=["All","Steering group","CMO group","NTWG","Other"];
   $("mfilter").innerHTML=groups.map(g=>
-    `<button class="${g===meetingFilter?"on":""}" onclick="meetingFilter='${g}';renderMeetings(window._meetings)">${g}</button>`).join("");
-  window._meetings=meetings;
+    `<button class="${g===meetingFilter?"on":""}" onclick="meetingFilter='${g}';renderMeetings(window._meetings)">${g}</button>`).join("")
+    /* knappen visas bara när det finns avbockade möten att ta tillbaka */
+    +(nHeld?`<button id="mtoggle" class="${hideHeld?"":"on"}" onclick="hideHeld=!hideHeld;renderMeetings(window._meetings)">`
+      +`${hideHeld?"Show":"Hide"} ${nHeld} held</button>`:"");
+
   const today=new Date();today.setHours(0,0,0,0);
   const sorted=[...meetings].sort((a,b)=>{
     const pa=parseDate(a.date),pb=parseDate(b.date);
     if(!pa&&!pb)return 0; if(!pa)return 1; if(!pb)return -1;
     return pa.d-pb.d;
   });
+  /* NEXT hoppar över möten som redan bockats av */
   let nextKey=null;
-  for(const m of sorted){const p=parseDate(m.date);if(p&&p.d>=today){nextKey=m;break;}}
-  const vis=sorted.filter(m=>meetingFilter==="All"||groupClass(m.group)===groupClass(meetingFilter));
-  $("mbody").innerHTML=vis.length?vis.map(m=>{
-    const isNext=m===nextKey;
-    return `<tr class="${isNext?"next-meeting":""}">
-      <td><b>${fmtDate(m.date)}</b>${isNext?'<span class="nextbadge">NEXT</span>':""}</td>
+  for(const m of sorted){const p=parseDate(m.date);if(p&&p.d>=today&&!isHeld(m)){nextKey=m;break;}}
+
+  let vis=sorted.filter(m=>meetingFilter==="All"||groupClass(m.group)===groupClass(meetingFilter));
+  if(hideHeld)vis=vis.filter(m=>!isHeld(m));
+  window._visMeetings=vis;
+
+  $("mbody").innerHTML=vis.length?vis.map((m,i)=>{
+    const h=isHeld(m), isNext=m===nextKey;
+    const locked=heldInSheet(m);   /* satt i arket, kan inte klickas bort lokalt */
+    return `<tr class="${isNext?"next-meeting":""}${h?" held":""}">
+      <td class="mtick" data-i="${i}" title="${locked?"Marked as held in the Google Sheet":(h?"Mark as not held":"Mark as held")}">
+        <span class="tk">${h?"&#10003;":""}</span></td>
+      <td><b>${fmtDate(m.date)}</b>${isNext?'<span class="nextbadge">NEXT</span>':""}${h?'<span class="heldbadge">HELD</span>':""}</td>
       <td><span class="grp ${groupClass(m.group)}">${esc(m.group)}</span></td>
-      <td>${esc(m.topic)}</td><td>${esc(m.location)}</td></tr>`;
-  }).join(""):`<tr><td colspan="4" style="color:var(--gray);font-style:italic">No meetings in this category yet.</td></tr>`;
+      <td class="topic">${esc(m.topic)}</td><td>${esc(m.location)}</td></tr>`;
+  }).join(""):`<tr><td colspan="5" style="color:var(--gray);font-style:italic">No meetings in this category yet.</td></tr>`;
 }
 
 /* ---------- render: gantt + timeline ---------- */
@@ -542,6 +589,18 @@ async function loadAll(){
     renderAll({activities:DEFAULT_ACTIVITIES,meetings:DEFAULT_MEETINGS,gantt:DEFAULT_GANTT,settings:[]});
   }
 }
+/* bocka av ett möte som genomfört (sparas i den här webbläsaren) */
+document.getElementById("mbody").addEventListener("click",e=>{
+  const cell=e.target.closest("td.mtick");
+  if(!cell)return;
+  const m=(window._visMeetings||[])[+cell.dataset.i];
+  if(!m||heldInSheet(m))return;          /* satt i arket, ändras där */
+  const s=heldSet(), k=mKey(m);
+  s.has(k)?s.delete(k):s.add(k);
+  saveHeld(s);
+  renderMeetings(window._meetings);
+});
+
 /* expand / collapse all deliverable areas */
 $("areatoggle").addEventListener("click",()=>{
   const all=[...document.querySelectorAll("#areas details.area")];
