@@ -362,7 +362,14 @@ function fmtDate(s){
   if(p.precision==="month")return MONTHS[p.d.getMonth()]+" "+p.d.getFullYear();
   return s;
 }
-function normStatus(s){
+/* En kryssruta i Google Sheets publiceras som TRUE eller FALSE i CSV:en.
+   Vi accepterar även de handskrivna varianter som kan förekomma. */
+function isTicked(v){
+  return ["true","1","x","ja","yes","done","klar"].includes((v||"").trim().toLowerCase());
+}
+/* done-kolumnen väger tyngst. status finns kvar för mellanläget "pågår". */
+function normStatus(s, done){
+  if(isTicked(done))return"done";
   s=(s||"").trim().toLowerCase();
   if(["done","klar","klart","färdig","ja"].includes(s))return"done";
   if(["ongoing","pågår","pagar","igång","igang"].includes(s))return"ongoing";
@@ -414,11 +421,11 @@ function renderAreas(activities){
         if(!px&&!py)return 0; if(!px)return 1; if(!py)return -1;
         return px.d-py.d;
       });
-    const d=acts.filter(a=>normStatus(a.status)==="done").length;
+    const d=acts.filter(a=>normStatus(a.status,a.done)==="done").length;
     done+=d; total+=acts.length;
     const pct=acts.length?Math.round(100*d/acts.length):0;
     const rows=acts.length?acts.map(a=>{
-      const s=normStatus(a.status);
+      const s=normStatus(a.status,a.done);
       const mark=s==="done"?"✓":(s==="ongoing"?"›":"");
       return `<div class="act ${s}"><div class="tick">${mark}</div>
         <div><span class="txt">${esc(a.activity)}</span>${a.owner?` <span class="own">· ${esc(a.owner)}</span>`:""}</div>
@@ -457,6 +464,7 @@ function saveHeld(s){
 }
 function mKey(m){return (m.date||"")+"|"+(m.topic||"");}
 function heldInSheet(m){
+  if(isTicked(m.done))return true;
   return ["done","held","klar","genomfört","genomfort"].includes((m.status||"").trim().toLowerCase());
 }
 
@@ -536,7 +544,7 @@ function renderGantt(gantt,activities){
   $("timeline").innerHTML="<h3 style='font-weight:900;margin-bottom:10px'>Milestones</h3>"+
     items.map(a=>{
       const p=parseDate(a.date);
-      const past=p.d<today&&normStatus(a.status)==="done";
+      const past=p.d<today&&normStatus(a.status,a.done)==="done";
       return `<div class="tl-item ${past?"past":""}">
         <div class="tl-date">${fmtDate(a.date)}</div>
         <div class="tl-what"><b>${esc(a.activity)}</b><span class="tl-area" style="color:${areaColor(a.area)};font-weight:700">${esc(a.area)}</span></div></div>`;
