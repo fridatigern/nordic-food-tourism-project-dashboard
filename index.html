@@ -197,11 +197,9 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
   .about-grid,.goal-grid,.area-grid{grid-template-columns:1fr}
   .facts{grid-template-columns:repeat(2,1fr)}
 }
-.repdl{display:flex;align-items:center;gap:.8rem;margin:1rem 0;padding:.9rem 1.1rem;background:var(--warm);border-left:4px solid #870000;border-radius:8px;color:inherit;text-decoration:none}
-.repdl .code{font-weight:700;color:#870000}
-.repdl span:nth-of-type(2){color:var(--gray);flex:1}
-.repdl i{font-style:normal;font-weight:700;color:#870000}
-.repdl:hover{background:#efe7e2}
+.dlbtn{align-self:center;font-size:.72rem;font-weight:900;letter-spacing:.02em;color:var(--red);background:var(--white);
+  border:1.5px solid var(--red);border-radius:20px;padding:4px 12px;text-decoration:none;white-space:nowrap}
+.dlbtn:hover{background:var(--red);color:#fff}
 </style>
 </head>
 <body>
@@ -448,7 +446,7 @@ function renderAreas(activities){
     }).join(""):`<div class="act"><div></div><span style="color:var(--gray);font-style:italic">No activities yet, add them in the sheet.</span></div>`;
     return `<details class="area" style="--ac:${A.color}">
       <summary>
-        <div class="ahead"><span class="code">${A.code}</span><h3>${esc(A.name)}</h3><span class="chev" aria-hidden="true">▾</span></div>
+        <div class="ahead"><span class="code">${A.code}</span><h3>${esc(A.name)}</h3>${A.code==="1.1"?`<a class="dlbtn" href="Nordic_Food_Tourism_Desk_Research_Report.pdf" target="_blank" rel="noopener" onclick="event.stopPropagation()">Download report PDF</a>`:""}<span class="chev" aria-hidden="true">▾</span></div>
         <div class="aprog"><div class="abar"><i style="width:${pct}%"></i></div><span class="apct">${d} / ${acts.length} done</span></div>
       </summary>
       <div class="abody">${rows}</div></details>`;
@@ -460,8 +458,6 @@ function renderAreas(activities){
   $("overall").innerHTML=`<div class="pct">${pct}%</div>
     <div class="bar"><i style="width:${pct}%"></i></div>
     <div class="lbl"><b>${done}</b> of <b>${total}</b> activities completed across all deliverables</div>`;
-  document.querySelectorAll(".repdl").forEach(e=>e.remove());
-  $("overall").insertAdjacentHTML("afterend",`<a class="repdl" href="Nordic_Food_Tourism_Desk_Research_Report.pdf" target="_blank" rel="noopener"><span class="code">1.1</span><b>Desk research report</b><span>Outcome 1.1 is complete. Download the report (PDF)</span><i aria-hidden="true">&darr;</i></a>`);
 }
 
 /* ---------- render: meetings ---------- */
