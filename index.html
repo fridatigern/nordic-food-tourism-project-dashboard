@@ -256,7 +256,6 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
     <div class="hint">Two tracks, one plan</div></div>
   <div class="ematrix"><div class="ewrap" id="ematrix"></div></div>
   <p style="font-size:.85rem;color:var(--gray);margin:.9rem 0 1.6rem">Several dates are still to be confirmed, including the Michelin location, Nordic Days and most of 2027.</p>
-  <div class="track-grid" id="tracks"></div>
 </section>
 
 </main>
@@ -321,7 +320,9 @@ const DEFAULT_ACTIVITIES = [
  {area:"1.4",activity:"Catalogue delivered",date:"2027-12",status:"planned",owner:""},
  {area:"2.1",activity:"Tivoli Food Festival, Copenhagen",date:"2026-08",status:"ongoing",owner:""},
  {area:"2.1",activity:"WTM London 2026",date:"2026-11",status:"planned",owner:""},
+ {area:"2.1",activity:"Everything Nordic 2027",date:"2027-03",status:"planned",owner:""},
  {area:"2.1",activity:"Falstaff Awards, 4 April",date:"2027-04-04",status:"planned",owner:""},
+ {area:"2.1",activity:"Madens Folkemøde, 20-22 May",date:"2027-05-20",status:"planned",owner:""},
  {area:"2.1",activity:"WTM London 2027",date:"2027-11",status:"planned",owner:""},
  {area:"1.5",activity:"Knowledge-anchoring activities",date:"2027-10",status:"planned",owner:""},
  {area:"1.5",activity:"Exit webinar",date:"2027-12",status:"planned",owner:""}
@@ -577,13 +578,6 @@ const EVENT_TRACKS = [
 ];
 
 function renderEvents(){
-  $("tracks").innerHTML = EVENT_TRACKS.map(t => `
-    <div class="track" style="--tc:${t.colour}">
-      <div class="thead"><div class="tnum">${t.n}</div><h3>${esc(t.name)}</h3></div>
-      <dl>${t.lines.map(([k, v]) =>
-        `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
-    </div>`).join("");
-
   const head = `<div class="erow"><div></div>` +
     EVENT_PERIODS.map(p => `<div class="ehead">${esc(p)}</div>`).join("") + `</div>`;
 
