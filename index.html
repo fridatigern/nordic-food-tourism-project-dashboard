@@ -186,6 +186,11 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
   .about-grid,.goal-grid,.area-grid{grid-template-columns:1fr}
   .facts{grid-template-columns:repeat(2,1fr)}
 }
+.repdl{display:flex;align-items:center;gap:.8rem;margin:1rem 0;padding:.9rem 1.1rem;background:var(--warm);border-left:4px solid #870000;border-radius:8px;color:inherit;text-decoration:none}
+.repdl .code{font-weight:700;color:#870000}
+.repdl span:nth-of-type(2){color:var(--gray);flex:1}
+.repdl i{font-style:normal;font-weight:700;color:#870000}
+.repdl:hover{background:#efe7e2}
 </style>
 </head>
 <body>
@@ -208,11 +213,9 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
 
 <nav><div class="wrap">
   <a href="#om"><span class="n">01</span> About</a>
-  <a href="#mal"><span class="n">02</span> Goals</a>
+  <a href="#tidsplan"><span class="n">02</span> Timeline</a>
   <a href="#leveranser"><span class="n">03</span> Deliverables</a>
-  <a href="#tidsplan"><span class="n">04</span> Timeline</a>
-  <a href="#event"><span class="n">05</span> Events</a>
-  <a href="#moten"><span class="n">06</span> Meetings</a>
+  <a href="#event"><span class="n">04</span> Events</a>
 </div></nav>
 
 <main class="wrap">
@@ -227,32 +230,13 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
     <div class="fact"><div class="k">Funding</div><div class="v">DKK 4.745m</div><div class="s">NCM 2.115m + NTOs 2.63m</div></div>
     <div class="fact"><div class="k">Framework</div><div class="v">Nordic Tourism Plan</div><div class="s">2025-2030 · Attractive Nordics</div></div>
   </div>
-  <div class="about-grid">
-    <div class="card"><h3>A strong legacy</h3>
-      <p>The New Nordic Kitchen Manifesto (2004) reshaped how the world sees Nordic food, and Nordic chefs have collected Bocuse d'Or medals for two decades.</p></div>
-    <div class="card"><h3>A fragmented picture</h3>
-      <p>High-quality local and seasonal food experiences exist across the region, but they are promoted country by country, with no shared Nordic story.</p></div>
-    <div class="card"><h3>A shared decision</h3>
-      <p>During the Danish Presidency of the Nordic Council of Ministers in 2026, all eight Nordic NTOs agreed to build a longer-term collaboration with the food sector.</p></div>
-  </div>
 </section>
 
-<section id="mal">
-  <div class="sec-head"><div class="num">02</div><h2>What the project should achieve</h2>
-    <div class="hint">Both indicators start from a baseline of zero</div></div>
-  <div class="goal-grid">
-    <div class="card goal">
-      <div class="top"><div class="num">1</div><h3>Stronger Nordic collaboration</h3></div>
-      <p>Strengthened synergy between key tourism and food sector actors across the Nordic region, around common development and a shared narrative.</p>
-      <div class="big">60%</div>
-      <div class="metric">of event participants supporting a common Nordic narrative and future collaboration</div>
-    </div>
-    <div class="card goal">
-      <div class="top"><div class="num">2</div><h3>Greater international pull</h3></div>
-      <p>Increased international attractiveness of Nordic food, food destinations, and local and seasonal products across the region.</p>
-      <div class="big">40</div>
-      <div class="metric">press mentions, measured through media monitoring</div>
-    </div>
+<section id="tidsplan">
+  <div class="sec-head"><div class="num">02</div><h2>Timeline</h2>
+    <div class="hint">May 2026 - December 2027</div></div>
+  <div class="gantt"><div class="gwrap" id="gantt"></div>
+    <div class="glegend" id="glegend"></div>
   </div>
 </section>
 
@@ -265,29 +249,14 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
 </section>
 
 
-<section id="tidsplan">
-  <div class="sec-head"><div class="num">04</div><h2>Timeline</h2>
-    <div class="hint">May 2026 - December 2027</div></div>
-  <div class="gantt"><div class="gwrap" id="gantt"></div>
-    <div class="glegend" id="glegend"></div>
-  </div>
-</section>
+
 
 <section id="event">
-  <div class="sec-head"><div class="num">05</div><h2>Events</h2>
+  <div class="sec-head"><div class="num">04</div><h2>Events</h2>
     <div class="hint">Two tracks, one plan</div></div>
-  <div class="track-grid" id="tracks"></div>
   <div class="ematrix"><div class="ewrap" id="ematrix"></div></div>
-</section>
-
-<section id="moten">
-  <div class="sec-head"><div class="num">06</div><h2>Meeting calendar</h2>
-    <div class="hint">Steering group · CMO group · NTWG</div></div>
-  <div class="mfilter" id="mfilter"></div>
-  <table class="mtable">
-    <thead><tr><th style="width:46px"></th><th style="width:130px">Date</th><th style="width:140px">Group</th><th>Topic</th><th style="width:190px">Location</th></tr></thead>
-    <tbody id="mbody"></tbody>
-  </table>
+  <p style="font-size:.85rem;color:var(--gray);margin:.9rem 0 1.6rem">Several dates are still to be confirmed, including the Michelin location, Nordic Days and most of 2027.</p>
+  <div class="track-grid" id="tracks"></div>
 </section>
 
 </main>
@@ -335,22 +304,24 @@ function areaColor(txt){
   return "var(--gray)";
 }
 const DEFAULT_ACTIVITIES = [
- {area:"1.1",activity:"National sections sent to all countries for feedback",date:"2026-08-21",status:"planned",owner:"Frida"},
- {area:"1.1",activity:"Correction round with steering group and CMO group",date:"2026-09-14",status:"planned",owner:"Frida"},
- {area:"1.1",activity:"Final report deadline",date:"2026-10-10",status:"planned",owner:"Frida"},
- {area:"1.1",activity:"Distribution to steering group, NTWG, NCM, all NTOs and stakeholders",date:"2026-10",status:"planned",owner:""},
- {area:"1.1",activity:"Digital report presentations for national and regional stakeholders",date:"2026-10",status:"planned",owner:""},
+ {area:"1.1",activity:"National sections sent to all countries for feedback",date:"2026-08-21",status:"done",owner:"Frida"},
+ {area:"1.1",activity:"Correction round with steering group and CMO group",date:"2026-09-14",status:"done",owner:"Frida"},
+ {area:"1.1",activity:"Final report deadline",date:"2026-10-10",status:"done",owner:"Frida"},
+ {area:"1.1",activity:"Distribution to steering group, NTWG, NCM, all NTOs and stakeholders",date:"2026-10",status:"done",owner:""},
+ {area:"1.1",activity:"Digital report presentations for national and regional stakeholders, national webinars start",date:"2026-11",status:"planned",owner:""},
  {area:"1.2",activity:"NTWG meeting and project presentation, Faroe Islands",date:"2026-08-17",status:"ongoing",owner:"Frida & Eva"},
  {area:"1.2",activity:"Possible first official event at MR-N meeting, Copenhagen",date:"2026-10-01",status:"planned",owner:""},
+ {area:"1.2",activity:"Dialogue with the New Nordic Food project starts",date:"2026-09",status:"planned",owner:""},
  {area:"1.2",activity:"Meeting with New Nordic Food on synergies for 2027",date:"2026-10",status:"planned",owner:""},
- {area:"1.2",activity:"Annual wheel 2027 finalised and shared",date:"2026-11",status:"planned",owner:""},
+ {area:"1.2",activity:"Annual wheel 2027 finalised and shared with steering group, NTWG, Nordic Council of Ministers and stakeholders",date:"2026-11",status:"planned",owner:""},
  {area:"1.3",activity:"Collect national food narratives from all eight countries",date:"2026-09",status:"ongoing",owner:"David"},
- {area:"1.3",activity:"Narrative process design",date:"2026-10",status:"planned",owner:"David"},
+ {area:"1.3",activity:"Narrative process design, work on the communication narrative begins",date:"2026-10",status:"planned",owner:"David"},
  {area:"1.4",activity:"Plan and process for the catalogue begins",date:"2026-10",status:"planned",owner:""},
  {area:"1.4",activity:"Study visits: Norway and Åland (cross-border inspiration)",date:"2026-10",status:"planned",owner:""},
  {area:"1.4",activity:"Catalogue delivered",date:"2027-12",status:"planned",owner:""},
  {area:"2.1",activity:"Tivoli Food Festival, Copenhagen",date:"2026-08",status:"ongoing",owner:""},
  {area:"2.1",activity:"WTM London 2026",date:"2026-11",status:"planned",owner:""},
+ {area:"2.1",activity:"Falstaff Awards, 4 April",date:"2027-04-04",status:"planned",owner:""},
  {area:"2.1",activity:"WTM London 2027",date:"2027-11",status:"planned",owner:""},
  {area:"1.5",activity:"Knowledge-anchoring activities",date:"2027-10",status:"planned",owner:""},
  {area:"1.5",activity:"Exit webinar",date:"2027-12",status:"planned",owner:""}
@@ -361,7 +332,8 @@ const DEFAULT_MEETINGS = [
  {date:"2026-08-24",group:"Other",topic:"New Nordic Food programme meeting",location:"Copenhagen"},
  {date:"2026-09-14",group:"Steering group",topic:"Correction round, final report",location:"Digital"},
  {date:"2026-09",group:"CMO group",topic:"Correction round, final report",location:"Digital"},
- {date:"2026-10-01",group:"Other",topic:"MR-N meeting, possible first official event",location:"Copenhagen"}
+ {date:"2026-10-01",group:"Other",topic:"MR-N meeting, possible first official event",location:"Copenhagen"},
+ {date:"2026-11-18",group:"NTWG",topic:"NTWG meeting: annual wheel for 2027",location:""}
 ];
 const DEFAULT_GANTT = [
  {phase:"1.1 Desk research report",start:"2026-05-01",end:"2026-10-10"},
@@ -474,6 +446,8 @@ function renderAreas(activities){
   $("overall").innerHTML=`<div class="pct">${pct}%</div>
     <div class="bar"><i style="width:${pct}%"></i></div>
     <div class="lbl"><b>${done}</b> of <b>${total}</b> activities completed across all deliverables</div>`;
+  document.querySelectorAll(".repdl").forEach(e=>e.remove());
+  $("overall").insertAdjacentHTML("afterend",`<a class="repdl" href="Nordic_Food_Tourism_Desk_Research_Report.pdf" target="_blank" rel="noopener"><span class="code">1.1</span><b>Desk research report</b><span>Outcome 1.1 is complete. Download the report (PDF)</span><i aria-hidden="true">&darr;</i></a>`);
 }
 
 /* ---------- render: meetings ---------- */
@@ -576,8 +550,8 @@ const EVENT_TRACKS = [
       ["National webinars, all eight NTOs", "WTM London 2026", "NTWG, 18 November",
        "Nordic Council of Ministers"],
       ["New Nordic Food, alignment meeting"],
-      ["Report presentation, Nordatlantens Brygge", "Nordic Days, Denmark",
-       "Tomorrow's Food Travel, Visit Sweden", "Arctic Young Chefs final, Reykjavík"],
+      ["Report presentation, Tomorrow's Food Travel, Visit Sweden", "Nordic Days, Denmark, networking",
+       "Falstaff Awards, 4 April"],
       [],
       ["Catalogue launch, to the eight and their regions", "Nordic Council session, week 44",
        "NTWG 2027", "Exit webinar and knowledge anchoring"]
@@ -587,18 +561,17 @@ const EVENT_TRACKS = [
     n: "2", name: "Showing the Nordic narrative",
     colour: "var(--blue)", tint: "#e4edf4",
     lines: [
-      ["Who is in the room", "International press, travel trade and travellers."],
-      ["Why we are there", "To build attention for Nordic food tourism, not for the project itself."],
-      ["What we bring", "One shared Nordic story, told together instead of country by country."],
+      ["Who is in the room", "International press, food sector, tourism sector, travellers, travel trade and partners."],
+      ["Why we are there", "To build attention for Nordic food tourism and to gather thoughts, ideas and connections with other sectors."],
+      ["What we bring", "One shared Nordic story, told together instead of country by country. An open mind for new ideas and initiatives."],
       ["What we take away", "Coverage, trade contacts and an understanding of what resonates internationally."]
     ],
     cells: [
-      ["~Nothing external until the narrative is ready in May 2027."],
       [],
       [],
+      ["Everything Nordic, March", "18 April, Nordic Food Programme sync with event"],
       ["Michelin Guide Nordic ceremony"],
-      ["Nordic table, Felleshus Berlin", "WTM London 2027, Nordic pavilion",
-       "Falstaff press event: narrative and catalogue"]
+      ["WTM London 2027, Nordic pavilion", "Falstaff press event: narrative and catalogue"]
     ]
   }
 ];
@@ -671,7 +644,6 @@ function renderAll(d){
   $("updated").textContent=s.lastupdated?("Sheet last updated: "+fmtDate(s.lastupdated)):"";
   if(s.sheetediturl){$("foot").innerHTML+=` · <a href="${esc(s.sheetediturl)}" style="color:var(--red)">Open the Google Sheet</a>`;}
   renderAreas(d.activities);
-  renderMeetings(d.meetings);
   renderGantt(d.gantt);
   renderEvents();
 }
@@ -702,7 +674,7 @@ async function loadAll(){
   }
 }
 /* bocka av ett möte som genomfört (sparas i den här webbläsaren) */
-document.getElementById("mbody").addEventListener("click",e=>{
+document.getElementById("mbody")&&document.getElementById("mbody").addEventListener("click",e=>{
   const cell=e.target.closest("td.mtick");
   if(!cell)return;
   const m=(window._visMeetings||[])[+cell.dataset.i];
