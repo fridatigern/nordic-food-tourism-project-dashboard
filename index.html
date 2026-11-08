@@ -29,6 +29,17 @@ header .sub{color:var(--rose);font-size:1.02rem;max-width:640px}
   padding:8px 14px;border-radius:20px;cursor:pointer}
 .updbox button:hover{background:var(--rose)}
 
+/* ---------- progress tiles under the header ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.kpi{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.kpi .k{font-size:.7rem;font-weight:900;letter-spacing:.09em;color:var(--red);text-transform:uppercase}
+.kpi .v{font-size:2rem;font-weight:900;line-height:1.1;margin-top:6px;color:var(--ink)}
+.kpi .v small{font-size:.95rem;font-weight:700;color:var(--gray)}
+.kpi .s{font-size:.78rem;color:var(--gray);margin-top:2px}
+.kpi .bar{height:8px;border-radius:4px;background:var(--warm);overflow:hidden;margin-top:10px}
+.kpi .bar i{display:block;height:100%;background:var(--red);border-radius:4px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+
 /* ---------- nav ---------- */
 nav{position:sticky;top:0;background:#fffdfc;border-bottom:1px solid var(--line);z-index:50}
 nav .wrap{display:flex;gap:4px;overflow-x:auto}
@@ -208,6 +219,8 @@ footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);font
     </div>
   </div>
 </header>
+
+<div class="wrap"><div class="kpis" id="kpis"></div></div>
 
 <div class="banner" id="bannerHolder"><div id="banner"></div></div>
 
@@ -633,8 +646,32 @@ function todayMarker(span){
 
 /* ---------- load ---------- */
 function settingsToObj(rows){const o={};(rows||[]).forEach(r=>{if(r.key)o[r.key.trim().toLowerCase()]=(r.value||"").trim();});return o;}
+/* Four tiles under the header. Percent = done activities in the area, unless
+   the Settings tab holds a number for it (progressreport, progresscatalogue,
+   progressnarrative). The report is finished, so it defaults to 100.
+   Events are shown as a count, not a percentage. */
+function renderKpis(activities,s){
+  const inArea=c=>activities.filter(a=>(a.area||"").trim()===c);
+  const nDone=c=>inArea(c).filter(a=>normStatus(a.status,a.done)==="done").length;
+  const pctOf=(c,key,dflt)=>{
+    const o=parseFloat(s[key]);
+    if(!isNaN(o))return Math.max(0,Math.min(100,Math.round(o)));
+    if(dflt!==undefined)return dflt;
+    const n=inArea(c).length;return n?Math.round(100*nDone(c)/n):0;
+  };
+  const tile=(k,pct,sub)=>`<div class="kpi"><div class="k">${k}</div><div class="v">${pct}%</div>
+    <div class="bar"><i style="width:${pct}%"></i></div><div class="s">${sub}</div></div>`;
+  const ev=inArea("2.1");
+  $("kpis").innerHTML=
+    tile("Report",pctOf("1.1","progressreport",100),"Desk research report")+
+    tile("Catalogue",pctOf("1.4","progresscatalogue"),"Product development catalogue")+
+    tile("Narrative",pctOf("1.3","progressnarrative"),"Shared Nordic narrative")+
+    `<div class="kpi"><div class="k">Event presence</div><div class="v">${nDone("2.1")} <small>of ${ev.length}</small></div>
+      <div class="s">Events attended, of those planned</div></div>`;
+}
 function renderAll(d){
   const s=settingsToObj(d.settings);
+  renderKpis(d.activities,s);
   $("updated").textContent=s.lastupdated?("Sheet last updated: "+fmtDate(s.lastupdated)):"";
   if(s.sheetediturl){$("foot").innerHTML+=` · <a href="${esc(s.sheetediturl)}" style="color:var(--red)">Open the Google Sheet</a>`;}
   renderAreas(d.activities);
